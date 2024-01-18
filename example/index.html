@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<head>
+<title>Github URL to markdown</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body { 
+  background-color: #010409;
+  color: white;
+  font-family: Arial;
+  padding: 10px;
+}
+
+.header {
+  padding: 30px;
+  text-align: center;
+  background: #0d1117;
+}
+
+.header h1 {
+  font-size: 50px;
+}
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  border: 2px solid white;
+  border-radius: 5px;
+  padding: 10px;
+
+}
+.card {
+  background-color: #0d1117;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.md { white-space: pre; font-family: monospace; }
+
+code {
+  color: red;
+  white-space: pre;
+  font-family: monospace;
+  font-style: italic;
+  font-size: 120%;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a {
+    float: none;
+    width: 100%;
+  }
+  code {
+    font-size: 100%;
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>spawnMd.js</h1>
+  <h2>Github Markdown URL to HTML</h2>
+</div>
+
+<div class="card">
+  <div id="output" class="md"></div>
+</div>
+
+<script>
+async function spawnMd(user, repo, id, doc){ // id used to select output element // doc used to point to a particular .md file 
+  // first API call - gets raw Markdown  
+  const url = `https://api.github.com/repos/${user}/${repo}/contents/${doc}`;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+    'X-GitHub-Api-Version': '2022-11-28'
+    },
+    //Authorization: "Bearer <AUTH-TOKEN>" // Uncomment the start of this line for authentication.
+  });
+  const contents = await res.json();
+  const decoded = atob(contents.content); 
+  console.log("Raw Markdown: \n" + decoded);  
+
+  // second API call - posts raw markdown to githubs markdown api
+  const url2 = "https://api.github.com/markdown/raw";
+  const res2 = await fetch(url2, {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/vnd.github+json',
+        //'Authorization': 'Bearer <AUTH_TOKEN>', // Uncomment the start of this line for authentication.
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'text/plain'
+    },
+    body: decoded
+    })
+    .then(function(response) {
+    return response.text();
+    });
+  document.getElementById(id).innerHTML =  res2;
+};
+// Call the function 
+spawnMd("Autonetic", "simple-comment-form", "output", "README.md");
+
+</script>

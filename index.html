@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<head>
+<title>Github URL to markdown</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body { 
+  background-color: #010409;
+  color: white;
+  font-family: Arial;
+  padding: 10px;
+}
+
+.header {
+  padding: 30px;
+  text-align: center;
+  background: #0d1117;
+}
+
+.header h1 {
+  font-size: 50px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #010409;
+  border: 2px solid white;
+  border-radius: 5px;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.topnav a:hover {
+  background-color: #010409;
+  color: white;
+  border: 2px solid white;
+  border-radius: 5px;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  border: 2px solid white;
+  border-radius: 5px;
+  padding: 10px;
+
+}
+
+.card {
+  background-color: #0d1117;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.row::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #0d1117;
+  margin-top: 20px;
+}
+
+.md { white-space: pre; font-family: monospace; }
+
+code {
+  color: red;
+  white-space: pre;
+  font-family: monospace;
+  font-style: italic;
+  font-size: 120%;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a {
+    float: none;
+    width: 100%;
+  }
+  code {
+    font-size: 100%;
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>spawnMd.js</h1>
+  <h2>Github Markdown URL to HTML</h2>
+</div>
+
+<div class="topnav">
+  <a href="https://autonetix.co">Dev website</a>
+  <a href="#output">Example</a>
+  <a href="https://github.com/Autonetic">Github page</a>
+    <a href="https://autonetix.co"class="w3-container"style="float:right; font-family:monospace;text-decoration: none;color:#48fb47;"><b><span style="background-color:#333;background-image:linear-gradient(#333,#111);width:200px;height:40px;border-style:solid;border-color:#48fb47;padding:5px;margin:5px;">Autonetix.co</span></b></a>
+</div>
+
+<div class="row">
+  <div class="center">
+    <div class="card">
+      <h2>spawnMd.js</h2>
+      <h5>Insert / render github markdown into HTML!</h5>
+      <p>JavaScript to GET a markdown document (eg README.md) using github's <code>REST</code> API, from any public repo and <code>POST</code> it to githubs markdown API to render a finalised .md file within any HTML document.</p>
+      <p>Includes support for private repo's, an authorization token is required; generated from your github <code>settings</code> page.</p>
+      <p>Usage:</p>
+      <p>Just include source script to use:</p>
+      <p style="overflow:auto;">
+        <code>&lt;script src="spawnMd.js"&gt;&lt;/script&gt;</code>
+      </p>
+      <p>And call the function like this:</p>
+      <p style="overflow:auto;">
+        <code>spawnMd("githubuser", "repo", "output-element-id", "FILE.md");</code>
+      </p>
+      <p>eg: spawnMd("facebook", "react", "output", "README.md");</p>
+    </div>
+    <div class="card">
+      <h2>spawnREADME.js</h2>
+      <h5>Render github README.md only</h5>
+      <p>Same script as above, however only works with a README.md file.</p>
+      <p>Include source script to use:</p>
+      <p style="overflow:auto;">
+        <code>&lt;script src="spawnREADME.js"&gt;&lt;/script&gt;</code>
+      </p>
+      <p>And call the function like this:</p>
+      <p style="overflow:auto;">
+        <code>spawnMd("githubuser", "repo", "output-element-id");</code>
+      </p>
+      <p>eg: spawnMd("facebook", "react", "output");</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Preview available bellow:</h2>
+  </div>
+</div>
+
+  <div class="card">
+    <div id="output" class="md"></div>
+  </div>
+
+<div class="footer">
+  <h2>Feel free to check out some of my other code!</h2>
+  <a href="https://autonetix.co"class="w3-container"style="font-family:monospace;text-decoration: none;color:#48fb47;"><b><span style="background-color:#333;background-image:linear-gradient(#333,#111);width:200px;height:40px;border-style:solid;border-color:#48fb47;padding:5px;margin:5px;">Autonetix.co</span></b></a>
+</div>
+
+<script>
+async function spawnMd(user, repo, id, doc){ // id used to select output element // doc used to point to a particular .md file 
+  // first API call - gets raw Markdown  
+  const url = `https://api.github.com/repos/${user}/${repo}/contents/${doc}`;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+    'X-GitHub-Api-Version': '2022-11-28'
+    },
+    //Authorization: "Bearer <AUTH-TOKEN>" // Uncomment the start of this line for authentication.
+  });
+  const contents = await res.json();
+  const decoded = atob(contents.content); 
+  console.log("Raw Markdown: \n" + decoded);  
+
+  // second API call - posts raw markdown to githubs markdown api
+  const url2 = "https://api.github.com/markdown/raw";
+  const res2 = await fetch(url2, {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/vnd.github+json',
+        //'Authorization': 'Bearer <AUTH_TOKEN>', // Uncomment the start of this line for authentication.
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'text/plain'
+    },
+    body: decoded
+    })
+    .then(function(response) {
+    return response.text();
+    });
+  document.getElementById(id).innerHTML =  res2;
+};
+// Call the function 
+spawnMd("Autonetic", "simple-comment-form", "output", "README.md");
+
+</script>
