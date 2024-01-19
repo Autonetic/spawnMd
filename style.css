@@ -1,2 +1,2 @@
 .md { white-space: pre; font-family: monospace; text-wrap: wrap;}
-.md code { background-color: #353943; color: white; border: 2.5px solid #353943;border-radius:5px; padding:2px; font-size: 100%; }
+.md code { background-color: #353943; color: white; border: 2.5px solid #353943;border-radius:5px; margin:0px 2.5px; font-size: 100%; }
