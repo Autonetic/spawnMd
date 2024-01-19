@@ -11,6 +11,7 @@ body {
   color: white;
   font-family: Arial;
   padding: 10px;
+  overflow-wrap: break-word !important;
 }
 
 .header {
@@ -60,6 +61,7 @@ body {
   background-color: #0d1117;
   padding: 20px;
   margin-top: 20px;
+  overflow-wrap: break-all; 
 }
 
 .row::after {
@@ -75,7 +77,7 @@ body {
   margin-top: 20px;
 }
 
-.md { white-space: pre; font-family: monospace; }
+.md { white-space: pre; font-family: monospace; text-wrap: wrap;}
 
 code {
   color: red;
@@ -94,7 +96,22 @@ code {
     font-size: 100%;
   }
 }
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
 
+::-webkit-scrollbar-track {
+  background: black; 
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: red; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff369b; 
+}
 </style>
 </head>
 <body>
@@ -109,7 +126,7 @@ code {
   <a href="https://github.com/Autonetic">Github page</a>
     <a href="https://autonetix.co"class="w3-container"style="float:right; font-family:monospace;text-decoration: none;color:#48fb47;"><b><span style="background-color:#333;background-image:linear-gradient(#333,#111);width:200px;height:40px;border-style:solid;border-color:#48fb47;padding:5px;margin:5px;">Autonetix.co</span></b></a>
 </div>
-
+<br>
 <div class="row">
   <div class="center">
     <div class="card">
